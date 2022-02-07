@@ -10,9 +10,9 @@
 
         <div class="login-form">
 
-            <input type="email" class="login-form-email" placeholder="E-mail" required>
+            <input type="email" class="login-form-email" placeholder="E-mail" required v-model="email">
 
-            <input type="password" class="login-form-password" placeholder="Password" required>
+            <input type="password" class="login-form-password" placeholder="Password" required v-model="password">
 
         </div>
 
@@ -31,16 +31,27 @@
 </template>
 
 <script>
+
+import firebase from 'firebase'
+
 export default {
     name:'Login',
     data(){
         return {
-
+            email: '',
+            password: ''
         }
     },
     methods: {
         login: function(){
-            this.$router.replace('home');
+            firebase.auth().signInWithEmailAndPassword(this.email, this.password).then(
+                (user) => {
+                    alert('Login Successful' + user);
+                    this.$router.replace('home');
+                },
+                (err) => {
+                    alert('Wrong Email or Password. Please try again' + err.message);
+                })
         }
 
     }

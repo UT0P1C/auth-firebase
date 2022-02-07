@@ -6,15 +6,15 @@
 
         <div class="sign-up-form">
 
-            <input type="email" class="sign-up-form-email" placeholder="E-mail" required>
+            <input type="email" class="sign-up-form-email" placeholder="E-mail" required v-model="email">
 
-            <input type="password" class="sign-up-form-password" placeholder="Password" required>
+            <input type="password" class="sign-up-form-password" placeholder="Password" required v-model="password">
 
         </div>
 
         <div class="sign-up-button">
 
-            <button class="sign-up-button">Sign Up!</button>
+            <button class="sign-up-button" v-on:click="signUp">Sign Up!</button>
 
         </div>
 
@@ -28,8 +28,29 @@
 </template>
 
 <script>
+import firebase from 'firebase';
+
 export default {
-    name: 'Register'
+    name: 'Register',
+    data(){
+        return{
+            email: '',
+            password: ''
+        }
+    },
+    methods: {
+        signUp: function(){
+            firebase.auth().createUserWithEmailAndPassword(this.email, this.password).then(
+                (user) => {
+                    alert('Sign up Successful' + user);
+                    this.$router.replace('login');
+                },
+                (err) => {
+                    alert('Unexpected error. Please try again' + err.message);
+                }
+            );
+        }
+    }
 }
 </script>
 
